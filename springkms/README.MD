@@ -14,7 +14,7 @@ Generate data key using below command. Refer [AWS documentation](https://docs.aw
 
 Run
 ```bash
-aws kms generate-data-key --key-id &lt;key-id&gt; --key-spec AES_256 --profile &lt;can be skipped if AWS_PROFILE set&gt; --region us-west-2
+aws kms generate-data-key --key-id <key-id> --key-spec AES_256 --profile <can be skipped if AWS_PROFILE set> --region us-west-2
 ```
 
 ## Step 4 : Reflect CiphertextBlob in the code 
@@ -23,7 +23,7 @@ Update com.example.springkms.utils.DataKeyProvider class's encryptedData with th
 ## Step 5 : Run Spring application 
 
 ```bash
-mvn exec:java -DAWS_PROFILE=&lt;profile&gt; -Dexec.mainClass="com.example.springkms.SpringKMSApplication"
+mvn exec:java -DAWS_PROFILE=<profile> -Dexec.mainClass="com.example.springkms.SpringKMSApplication"
 ```
 
 ## Step 6 : Connect to H2 DB 
