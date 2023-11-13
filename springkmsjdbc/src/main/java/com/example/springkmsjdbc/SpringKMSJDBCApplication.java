@@ -46,6 +46,10 @@ import java.util.List;
 // https://codetinkering.com/spring-jdbc-beforesavecallback-example/
 // https://spring.io/blog/2021/09/09/spring-data-jdbc-how-to-use-custom-id-generation
 // https://stackoverflow.com/questions/72816974/customconversions-not-working-in-spring-data-jdbc
+// https://github.com/spring-projects/spring-data-relational/issues/629
+// https://github.com/spring-projects/spring-framework/blob/main/spring-core/src/main/java/org/springframework/core/convert/support/EnumToIntegerConverter.java
+// https://github.com/spring-projects/spring-framework/blob/main/spring-core/src/main/java/org/springframework/core/convert/converter/Converter.java#L36
+// https://github.com/spring-projects/spring-data-relational/blob/2.2.x/spring-data-jdbc/src/main/java/org/springframework/data/jdbc/repository/config/AbstractJdbcConfiguration.java
 //
 // H2:
 // CREATE TABLE VEHICLE  ("id" INT PRIMARY KEY auto_increment, "created_by" VARCHAR(255), "created_on" TIMESTAMP, "make" VARCHAR(255), "mode_year" VARCHAR(255), "model" VARCHAR(255), "type" VARCHAR(255), "vin" VARCHAR(255))
