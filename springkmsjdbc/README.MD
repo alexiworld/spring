@@ -1,4 +1,5 @@
-A sample app to encrypt/decrypt data before storing into database using AWS kms. 
+A sample app to encrypt/decrypt data before storing into database using AWS kms. This app uses Spring Data JDBC, and demostrates 2 methods of field encryption. The recommended way is to create write and read converters for EncryptedString, a type purposely introduced to trigger encrypt/decrypt convertersion.
+
 AWS KMS uses [envelop encryption](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#enveloping).
 
 ![](diagram.png)
@@ -42,7 +43,7 @@ curl -H "Content-type: application/json" localhost:8080/rest/v1/vehicle -d @payl
 ```
 
 ## Step 9 : Check VEHICLE table 
-Switch back to the browser and click the Run button to rerun the SELECT query. Now, you will see the record with vin being encrypted.
+Switch back to the browser and click the Run button to rerun the SELECT query. Now, you will see the record with vin and created by being encrypted using respectively Method #1 and #2.
 
 ## Step 10 : Call Vehicle REST API to fetch previously created record. 
 
