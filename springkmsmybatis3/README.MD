@@ -65,3 +65,12 @@ Switch back to the PSQL client (or for H2 the browser and click the Run button t
 ```bash
 curl localhost:8080/rest/v1/vehicle/1 and you will see the record being returned.
 ```
+
+Sources:
+
++ https://mybatis.org/mybatis-3/configuration.html
++ https://mybatis.org/mybatis-3/getting-started.html
++ https://mybatis.org/spring/getting-started.html
++ https://mybatis.org/mybatis-dynamic-sql/docs/insert.html
++ https://github.com/mybatis/mybatis-dynamic-sql/blob/759d8ecce2ff2d23fb40f54d9b96b40240198ba2/src/test/java/examples/generated/always/mybatis/GeneratedAlwaysMapper.java
++ https://mybatis.org/mybatis-3/dynamic-sql.html
