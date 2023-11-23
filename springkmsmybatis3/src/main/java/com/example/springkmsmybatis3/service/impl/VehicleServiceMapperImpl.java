@@ -9,6 +9,8 @@ import com.example.springkmsmybatis3.model.VehicleResponse;
 import com.example.springkmsmybatis3.service.VehicleService;
 import com.example.springkmsmybatis3.utils.ModelUtils;
 import lombok.extern.log4j.Log4j2;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.dynamic.sql.SqlBuilder;
 import org.mybatis.dynamic.sql.SqlColumn;
 import org.mybatis.dynamic.sql.SqlTable;
@@ -28,7 +30,7 @@ import java.util.stream.StreamSupport;
 public class VehicleServiceMapperImpl implements VehicleService {
 
     @Autowired
-    VehicleEntityJavaMapper vehicleEntityJavaMapper;
+    SqlSessionFactory sqlSessionFactory;
 
     public VehicleResponse process(Vehicle vehicle){
         VehicleEntity vehicleEntity = ModelUtils.map(vehicle);
@@ -50,49 +52,70 @@ public class VehicleServiceMapperImpl implements VehicleService {
                 .map(SqlColumn.of("created_by", sqlTable)).toProperty("createdBy")
                 .build()
                 .render(RenderingStrategies.MYBATIS3);
-        int res = vehicleEntityJavaMapper.save(insertStatement);
 
-        VehicleResponse response = new VehicleResponse();
-        response.setId(insertStatement.getRow().getId());
-        return response;
+        try (SqlSession session = sqlSessionFactory.openSession()) {
+            VehicleEntityJavaMapper mapper = session.getMapper(VehicleEntityJavaMapper.class);
+            int res = mapper.save(insertStatement);
+            VehicleResponse response = new VehicleResponse();
+            response.setId(insertStatement.getRow().getId());
+            return response;
+        }
     }
 
     public Vehicle fetchVehicle(Long id) {
-        Optional<Vehicle> result = Optional.ofNullable(vehicleEntityJavaMapper.findById(id))
-                .map(ModelUtils::map);
-        if(result.isPresent()){
-            return result.get();
+        try (SqlSession session = sqlSessionFactory.openSession()) {
+            VehicleEntityJavaMapper mapper = session.getMapper(VehicleEntityJavaMapper.class);
+            Optional<Vehicle> result = Optional.ofNullable(mapper.findById(id))
+                    .map(ModelUtils::map);
+            if (result.isPresent()) {
+                return result.get();
+            }
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No vehicle found with id " + id);
         }
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND,"No vehicle found with id "+id);
     }
 
     public Vehicle fetchVehicleByVin(String vinNumber) {
-        Optional<Vehicle> result =
-                Optional.ofNullable(vehicleEntityJavaMapper.findByVinNumber(EncrappedString.to(vinNumber)))
-                        .map(ModelUtils::map);
-        if(result.isPresent()){
-            return result.get();
+        try (SqlSession session = sqlSessionFactory.openSession()) {
+            VehicleEntityJavaMapper mapper = session.getMapper(VehicleEntityJavaMapper.class);
+            Optional<Vehicle> result =
+                    Optional.ofNullable(mapper.findByVinNumber(EncrappedString.to(vinNumber)))
+                            .map(ModelUtils::map);
+            if (result.isPresent()) {
+                return result.get();
+            }
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No vehicle found with vin " + vinNumber);
         }
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND,"No vehicle found with vin "+vinNumber);
     }
 
     public List<Vehicle> fetchVehicles() {
-        Iterable<VehicleEntity> result = vehicleEntityJavaMapper.findAll();
-        return StreamSupport.stream(result.spliterator(), false).map(ModelUtils::map).toList();
+        try (SqlSession session = sqlSessionFactory.openSession()) {
+            VehicleEntityJavaMapper mapper = session.getMapper(VehicleEntityJavaMapper.class);
+            Iterable<VehicleEntity> result = mapper.findAll();
+            return StreamSupport.stream(result.spliterator(), false).map(ModelUtils::map).toList();
+        }
     }
 
     public List<Vehicle> fetchVehiclesByYear(String year) {
-        List<VehicleEntity> result = vehicleEntityJavaMapper.findAllByYear(year);
-        return result.stream().map(ModelUtils::map).toList();
+        try (SqlSession session = sqlSessionFactory.openSession()) {
+            VehicleEntityJavaMapper mapper = session.getMapper(VehicleEntityJavaMapper.class);
+            List<VehicleEntity> result = mapper.findAllByYear(year);
+            return result.stream().map(ModelUtils::map).toList();
+        }
     }
 
     public List<Vehicle> fetchVehiclesByAgent(String agent) {
-        List<VehicleEntity> result = vehicleEntityJavaMapper.findAllByCreatedBy(EncryptedString.to(agent));
-        return result.stream().map(ModelUtils::map).toList();
+        try (SqlSession session = sqlSessionFactory.openSession()) {
+            VehicleEntityJavaMapper mapper = session.getMapper(VehicleEntityJavaMapper.class);
+            List<VehicleEntity> result = mapper.findAllByCreatedBy(EncryptedString.to(agent));
+            return result.stream().map(ModelUtils::map).toList();
+        }
     }
 
     public void deleteVehicle(Long id) {
-        vehicleEntityJavaMapper.deleteById(id);
+        try (SqlSession session = sqlSessionFactory.openSession()) {
+            VehicleEntityJavaMapper mapper = session.getMapper(VehicleEntityJavaMapper.class);
+            mapper.deleteById(id);
+        }
     }
 
 }

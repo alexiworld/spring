@@ -11,18 +11,32 @@ import java.util.List;
 
 public interface VehicleEntityJavaMapper {
 
+  @Results(id = "vehicleEntityResultMap", value = {
+      @Result(property="id", column="id"),
+      @Result(property="vinNumber", column="vin"),
+      @Result(property="type", column="type"),
+      @Result(property="model", column="model"),
+      @Result(property="make", column="make"),
+      @Result(property="year", column="mode_year"),
+      @Result(property="createdOn", column="created_on"),
+      @Result(property="createdBy", column="created_by")
+  })
   @Select("SELECT * FROM \"VEHICLE\" WHERE id = #{id}")
   VehicleEntity findById(@Param("id") Long id);
 
+  @ResultMap("vehicleEntityResultMap")
   @Select("SELECT * FROM \"VEHICLE\" v WHERE v.vin = #{vinNumber}")
   VehicleEntity findByVinNumber(@Param("vinNumber") EncrappedString vinNumber);
 
+  @ResultMap("vehicleEntityResultMap")
   @Select("SELECT * FROM \"VEHICLE\"")
   List<VehicleEntity> findAll();
 
+  @ResultMap("vehicleEntityResultMap")
   @Select("SELECT * FROM \"VEHICLE\" v WHERE v.created_by = #{createdBy}")
   List<VehicleEntity> findAllByCreatedBy(@Param("createdBy") EncryptedString createdBy);
 
+  @ResultMap("vehicleEntityResultMap")
   @Select("SELECT * FROM \"VEHICLE\" v WHERE v.mode_year = #{year}")
   List<VehicleEntity> findAllByYear(@Param("year") String year);
 
