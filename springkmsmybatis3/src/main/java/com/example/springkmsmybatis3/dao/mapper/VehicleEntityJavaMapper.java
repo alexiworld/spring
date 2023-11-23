@@ -11,6 +11,7 @@ import java.util.List;
 
 public interface VehicleEntityJavaMapper {
 
+  // Mapping how-to is found at https://medium.com/@hsvdahiya/mybatis-annotations-result-mapping-spring-79944ff74b84
   @Results(id = "vehicleEntityResultMap", value = {
       @Result(property="id", column="id"),
       @Result(property="vinNumber", column="vin"),

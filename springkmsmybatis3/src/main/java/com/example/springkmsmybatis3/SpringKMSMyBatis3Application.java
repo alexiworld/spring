@@ -32,6 +32,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 // https://github.com/ColinZou/mybatis-column-encryption
 // https://www.baeldung.com/spring-mybatis
 // https://stackoverflow.com/questions/56593722/how-to-specify-typehandler-for-setmyenum-in-mybatis
+// https://ibatis.apache.org/docs/dotnet/datamapper/ch03s05.html
 //
 // H2:
 // CREATE TABLE VEHICLE  ("id" INT PRIMARY KEY auto_increment, "created_by" VARCHAR(255), "created_on" TIMESTAMP, "make" VARCHAR(255), "mode_year" VARCHAR(255), "model" VARCHAR(255), "type" VARCHAR(255), "vin" VARCHAR(255))
@@ -59,7 +60,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 // curl localhost:8080/rest/v1/vehicle/vin/vin123
 // curl localhost:8080/rest/v1/vehicle/vin/vin456
 // curl localhost:8080/rest/v1/vehicle/vin/vin789
-
 
 @SpringBootApplication
 @Log4j2

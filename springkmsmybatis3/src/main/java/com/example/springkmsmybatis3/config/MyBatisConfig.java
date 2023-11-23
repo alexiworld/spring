@@ -99,22 +99,14 @@ public class MyBatisConfig implements WebMvcConfigurer {
                 new ClassPathResource("com/example/springkmsmybatis3/dao/VehicleEntityXMLMapper.xml"));
         factoryBean.setDataSource(dataSource);
         factoryBean.getObject().getConfiguration().addMapper(VehicleEntityJavaMapper.class);
-
-//        TransactionFactory transactionFactory = new JdbcTransactionFactory();
-//        Environment environment =
-//                new Environment("development", transactionFactory, dataSource);
-//        org.apache.ibatis.session.Configuration configuration =
-//                new org.apache.ibatis.session.Configuration(environment);
-//        configuration.addMapper(VehicleEntityJavaMapper.class);
-//
-//        factoryBean.setConfiguration(configuration);
         return factoryBean.getObject();
     }
 
+//    According to https://mybatis.org/mybatis-3/getting-started.html mappers should be obtained
+//    on method level from the sql session being given by the sql session factory.
 //    @Bean
 //    @Autowired
 //    public VehicleEntityJavaMapper vehicleMapper(SqlSessionFactory sqlSessionFactory) throws Exception {
-//        // adding the vehicle mapper to prevent template from throwing "unable to find mapper in the mapper registry" exception
 //        SqlSessionTemplate sqlSessionTemplate = new SqlSessionTemplate(sqlSessionFactory);
 //        return sqlSessionTemplate.getMapper(VehicleEntityJavaMapper.class);
 //    }
