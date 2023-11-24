@@ -16,8 +16,6 @@ import java.util.Optional;
  * <code>VehicleRepository</code> interface is extension of the <code>CrudRepository</>
  * interface. It is limited to demonstrating the field encryption capabilities. Do not
  * use it as a reference application.
- *
- * @author alexi.j
  */
 @Repository
 @Transactional(readOnly = true)
