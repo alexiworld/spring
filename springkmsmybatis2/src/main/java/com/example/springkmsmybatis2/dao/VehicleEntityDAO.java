@@ -42,6 +42,11 @@ public class VehicleEntityDAO extends SqlMapClientDaoSupport {
     // operates differently by SELECT-ing something after the INSERT. This does not seem to
     // work with PostgreSQL when using the sequence, and setting @Transactional's isolation
     // to any of the possible values SERIALIZABLE, COMMITTED, UNCOMMITTED, and REPEATABLE.
+    // INFO: Tried using selectKey with "pre" as explained in
+    // https://stackoverflow.com/questions/22131590/conditionally-execute-selectkey-in-mybatis
+    // and set to use sequence's nextval as opposed to last_value. This ensures each insert
+    // will get its own ID, different from the others. The disadvantage would be that if for
+    // failed inserts there will be wasted IDs, which is far lesser concern than racing issue.
     public VehicleEntity save(VehicleEntity entity) {
         Long id = (Long) getSqlMapClientTemplate().insert(
                 "com.example.springkmsmybatis2.save", entity);

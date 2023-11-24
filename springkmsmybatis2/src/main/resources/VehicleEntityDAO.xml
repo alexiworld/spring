@@ -23,7 +23,7 @@
         SELECT CASE WHEN (is_called='t') THEN last_value + 1 WHEN (is_called!='t') THEN last_value END AS next_value FROM "VEHICLE_id_seq";
     </statement>
 
-    <insert id="save" parameterClass="com.example.springkmsmybatis2.dao.entity.VehicleEntity">
+    <insert id="savePostCauseRacing" parameterClass="com.example.springkmsmybatis2.dao.entity.VehicleEntity">
         <selectKey resultClass="Long" keyProperty="id" type="post">
             SELECT last_value FROM "VEHICLE_id_seq";
         </selectKey>
@@ -41,6 +41,26 @@
             RETURNING id;
         ]]>
     </insert>
+    <insert id="save" parameterClass="com.example.springkmsmybatis2.dao.entity.VehicleEntity">
+        <selectKey resultClass="Long" keyProperty="id" type="pre">
+            SELECT nextval(pg_get_serial_sequence('"VEHICLE"', 'id'))
+        </selectKey>
+        <![CDATA[
+        INSERT
+        INTO "VEHICLE" (id, vin, type, model, make, mode_year, created_on, created_by) VALUES (
+            #id#,
+            #vinNumber,handler=com.example.springkmsmybatis2.dao.typehandler.EncWrappedCallback#,
+            #type#,
+            #model#,
+            #make#,
+            #year#,
+            #createdOn,handler=LocalDateTimeCallback#,
+            #createdBy#
+        )
+        RETURNING id;
+        ]]>
+    </insert>
+
     <select id="findById" parameterClass="Long" resultMap="vehicleEntityResultMap">
         select * from "VEHICLE" v where v.id = #id#
     </select>

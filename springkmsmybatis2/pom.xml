@@ -14,11 +14,7 @@
 	<name>springkmsmybatis2</name>
 	<description>Demo project for field encrypting. Uses Spring Boot, KMS, MyBatis2</description>
 	<properties>
-		<spring-mybatis.version>3.0.3</spring-mybatis.version>
-		<mybatis.version>3.5.14</mybatis.version>
-		<mybatis-spring-boot-starter.version>3.0.2</mybatis-spring-boot-starter.version>
 		<java.version>17</java.version>
-		<mybatis-dynamic-sql.version>1.5.0</mybatis-dynamic-sql.version>
 	</properties>
 	<dependencies>
 		<dependency>
