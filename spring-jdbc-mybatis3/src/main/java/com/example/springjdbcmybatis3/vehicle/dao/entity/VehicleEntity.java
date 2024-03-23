@@ -14,13 +14,13 @@ public class VehicleEntity {
     private static AtomicLong counter = new AtomicLong();
 
     private Long id; // = counter.incrementAndGet();
-    private EncrappedString vinNumber;
+    private String vinNumber;
     //private HashedString vinNumberHash; // override setVinNumber to set the plain value in this field.
     private String type;
     private String model;
     private String make;
     private String year;
     private LocalDateTime createdOn;
-    private EncryptedString createdBy;
+    private String createdBy;
 
 }

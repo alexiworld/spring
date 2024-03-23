@@ -1,8 +1,6 @@
 package com.example.springjdbcmybatis3.config;
 
 import com.example.springjdbcmybatis3.vehicle.dao.mapper.VehicleEntityJavaMapper;
-import com.example.springjdbcmybatis3.vehicle.dao.typehandler.EncrappedTypeHandler;
-import com.example.springjdbcmybatis3.vehicle.dao.typehandler.EncryptedTypeHandler;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.springframework.beans.factory.annotation.Autowired;

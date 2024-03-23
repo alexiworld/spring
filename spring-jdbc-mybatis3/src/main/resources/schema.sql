@@ -1,4 +1,4 @@
-CREATE TABLE vehicle IF NOT EXISTS
+CREATE TABLE IF NOT EXISTS vehicle
 (
     id SERIAL PRIMARY KEY,
     created_by VARCHAR(255),
@@ -10,7 +10,7 @@ CREATE TABLE vehicle IF NOT EXISTS
     vin VARCHAR(255)
 );
 
-CREATE TABLE todo IF NOT EXISTS (
+CREATE TABLE IF NOT EXISTS todo (
     todo_id SERIAL PRIMARY KEY,
     todo_title VARCHAR(30),
     finished BOOLEAN,

@@ -2,8 +2,8 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.example.springmybatis3.newhope.domain.TodoMapper">
-    <resultMap id="todoRes" type="com.example.springmybatis3.newhope.domain.Todo">
+<mapper namespace="com.example.springjdbcmybatis3.todo.domain.TodoMapper">
+    <resultMap id="todoRes" type="com.example.springjdbcmybatis3.todo.domain.Todo">
         <result property="todoId" column="todo_id"/>
         <result property="todoTitle" column="todo_title"/>
         <result property="finished" column="finished"/>
