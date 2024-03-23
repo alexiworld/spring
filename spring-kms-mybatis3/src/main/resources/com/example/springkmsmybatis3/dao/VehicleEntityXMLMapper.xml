@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.springkmsmybatis3.dao.VehicleEntityXMLMapper">
+    <resultMap id="vehicleEntityResultMap" type="com.example.springkmsmybatis3.dao.entity.VehicleEntity">
+        <result property="id" column="id"/>
+        <result property="vinNumber" column="vin"/>
+        <result property="type" column="type"/>
+        <result property="model" column="model"/>
+        <result property="make" column="make"/>
+        <result property="year" column="mode_year"/>
+        <result property="createdOn" column="created_on"/>
+        <result property="createdBy" column="created_by"/>
+    </resultMap>
+
+<!--    VEHICLE_id_seq must not be used to set the next ID in the insert statement because -->
+<!--    by doing so the sequence will not increase its value. The workarounds would be:    -->
+<!--      1. To use MAX(id)+1 from VEHICLE table (effectively scrapping VEHICLE_id_seq)    -->
+<!--         but then this app will not be compatible with JPA and JDBC siblings.          -->
+<!--      2. To correct the query to include is_called and reset the sequence after every  -->
+<!--         insert. The performance may be impacted by the latter. Failed inserts due to  -->
+<!--         racing conditions possible. Because "alter sequence restart" cannot add       -->
+<!--         numbers (#{id}+1 will not work, pure SQL):                                    -->
+<!--              alter sequence "VEHICLE_id_seq" restart #{id};                           -->
+<!--         , the alternative was to make (false is for is_called flag):                  -->
+<!--              SELECT setval("VEHICLE_id_seq", #{id}+1, false);                         -->
+<!--         working, and turned out it need to be changed to:                             -->
+<!--              SELECT setval(pg_get_serial_sequence('"VEHICLE"', 'id'), #{id}+1, false);-->
+<!--    https://stackoverflow.com/questions/8745051/postgres-manually-alter-sequence       -->
+    <select id="findNextId" resultType="Long">
+        SELECT CASE WHEN (is_called='t') THEN last_value + 1 WHEN (is_called!='t') THEN last_value END AS next_value FROM "VEHICLE_id_seq";
+    </select>
+<!--    <select id="findNextId" resultType="Long">-->
+<!--        SELECT last_value FROM "VEHICLE_id_seq"-->
+<!--    </select>-->
+<!--    <select id="findNextId" resultType="Long">-->
+<!--        SELECT MAX(id)+1 FROM "VEHICLE"-->
+<!--    </select>-->
+    <insert id="saveWithId" parameterType="com.example.springkmsmybatis3.dao.entity.VehicleEntity" >
+        <![CDATA[
+        INSERT
+        INTO "VEHICLE" (id, vin, type, model, make, mode_year, created_on, created_by) VALUES (
+                #{id},
+                #{vinNumber},
+                #{type},
+                #{model},
+                #{make},
+                #{year},
+                #{createdOn},
+                #{createdBy}
+        ); SELECT setval(pg_get_serial_sequence('"VEHICLE"', 'id'), #{id}+1, false);
+        ]]>
+    </insert>
+<!--    Better solution is to insert and get back the ID stored in the entity passed as a parameter       -->
+<!--    https://topic.alibabacloud.com/a/mybatis-insert-entity-return-primary-key_8_8_20228800.html       -->
+<!--    https://community.retool.com/t/how-to-get-the-id-immediately-after-inserting-a-new-record/16398   -->
+<!--    Other solutions would require mapper interfaces:               -->
+<!--    https://mybatis.org/mybatis-dynamic-sql/docs/insert.html       -->
+<!--    https://github.com/mybatis/mybatis-dynamic-sql/issues/83       -->
+<!--    https://github.com/mybatis/mybatis-dynamic-sql/blob/759d8ecce2ff2d23fb40f54d9b96b40240198ba2/src/test/java/examples/generated/always/mybatis/GeneratedAlwaysMapper.java     -->
+    <insert id="save" parameterType="com.example.springkmsmybatis3.dao.entity.VehicleEntity"
+        useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+        INSERT
+        INTO "VEHICLE" (vin, type, model, make, mode_year, created_on, created_by) VALUES (
+                #{vinNumber},
+                #{type},
+                #{model},
+                #{make},
+                #{year},
+                #{createdOn},
+                #{createdBy}
+        )
+        RETURNING id;
+        ]]>
+    </insert>
+    <select id="findById" parameterType="Long" resultMap="vehicleEntityResultMap">
+        select * from "VEHICLE" v where v.id = #{id}
+    </select>
+    <select id="findByVinNumber"  parameterType="com.example.springkmsmybatis3.model.EncrappedString" resultMap="vehicleEntityResultMap">
+        select * from "VEHICLE" v where v.vin = #{value}
+    </select>
+    <select id="findAll" resultMap="vehicleEntityResultMap">
+        SELECT * FROM "VEHICLE";
+    </select>
+    <select id="findAllCreatedBy" parameterType="com.example.springkmsmybatis3.model.EncryptedString" resultMap="vehicleEntityResultMap">
+        select * from "VEHICLE" v where v.created_by = #{value}
+    </select>
+    <select id="findAllByYear" resultMap="vehicleEntityResultMap">
+        select * from "VEHICLE" v where v.mode_year = #{value}
+    </select>
+    <delete id="deleteById">
+        select * from "VEHICLE" v where v.id = #{value}
+    </delete>
+</mapper>
