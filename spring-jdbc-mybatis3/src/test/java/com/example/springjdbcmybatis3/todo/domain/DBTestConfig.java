@@ -52,6 +52,7 @@ public class DBTestConfig { //extends AbstractJdbcConfiguration { // commented b
         return factoryBean.getObject();
     }
 
+    // MyBatisJdbcConfiguration requires SqlSession, and so this method uses the factory to create one.
     @Bean
     @Autowired
     public SqlSession sqlSession(SqlSessionFactory factory) {
